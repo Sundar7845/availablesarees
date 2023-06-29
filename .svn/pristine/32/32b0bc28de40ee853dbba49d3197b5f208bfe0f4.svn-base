@@ -1,0 +1,25 @@
+
+<?php $__env->startSection('content'); ?>
+<?php $__env->startSection('title'); ?> Available Sarees | All Products <?php $__env->stopSection(); ?>
+<div class="shop-area pt-40 pb-40">
+    <div class="container">
+      <div class="row flex-row-reverse">
+        <div class="col-lg-12">
+          <div class="shop-bottom-area">
+            <div class="tab-content jump">
+              <div id="shop-1" class="tab-pane active">
+                <div class="row" id="grid_view_product">
+                    <?php echo $__env->make('shop_grid_view', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                </div>
+              </div>
+            </div>
+            <div class="ajax-loadmore-product text-center" style="display:none;">
+              <img src="<?php echo e(asset('frontend/assets/images/logo/Spinner-1s-200px.svg')); ?>" style="width: 120px; height: 120px;" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('main_master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\availablesarees\resources\views/shop_details.blade.php ENDPATH**/ ?>

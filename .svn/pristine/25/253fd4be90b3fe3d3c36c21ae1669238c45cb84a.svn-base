@@ -1,0 +1,79 @@
+
+<?php $__env->startSection('content'); ?>
+<?php $__env->startSection('title'); ?> Available Sarees | All Products <?php $__env->stopSection(); ?>
+<div class="product-details-area pt-40 pb-40">
+  <div class="container">
+     <?php $url= "https://www.nithitex.com"; ?> <div class="row">
+      <div class="col-lg-6 col-md-6">
+        <div class="product-details-tab">
+          <div class="pro-dec-big-img-slider"> <?php $__currentLoopData = $multiImage; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $mulimg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> <div class="easyzoom-style">
+              <div class="easyzoom easyzoom--overlay">
+                <a href="<?php echo e('https://www.nithitex.com/'.$mulimg->product_mult_image); ?>">
+                  <img src="<?php echo e('https://www.nithitex.com/'.$mulimg->product_mult_image); ?>" alt="" class="img-fluid">
+                </a>
+              </div>
+            </div> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> </div>
+          <div class="product-dec-slider-small product-dec-small-style1"> <?php if($multiImage->count() > 1): ?> <?php $__currentLoopData = $multiImage; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $mulimg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> <div class="product-dec-small">
+              <img src="<?php echo e('https://www.nithitex.com/'.$mulimg->product_mult_image); ?>" alt="">
+            </div> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> <?php endif; ?> </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6">
+        <div class="product-details-content pro-details-content-mrg">
+          <input type="hidden" id="product_id" value="<?php echo e($product_details->id); ?>">
+          <h2>
+            <span id="pname"><?php echo e($product_details->product_name); ?></span>
+          </h2>
+          <p class="pt-20"><?php echo $product_details->short_description; ?></p>
+          <?php if($product_details->color_id != null): ?>
+          <div class="pro-details-color-wrap">
+            <span>Color:</span>
+            <div class="pro-details-color-content">
+              <ul>
+                <li>
+                  <a style="background-color: <?php echo e($product_details->color->color_code); ?>;"></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <?php endif; ?>
+          <div class="pro-details-quality">
+            <span class="pt-20">Avail. Qty: <?php echo e($product_details->current_stock); ?></span>
+          </div>
+          <div class="pro-details-quality">
+            <span>Product SKU: <?php echo e($product_details->product_sku); ?></span>
+          </div>
+          <div class="product-details-meta pt-20">
+            <ul>
+              <li>
+                <span>Categories:</span> <?php echo e($product_details->category->category_name); ?>
+
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="description-review-wrapper pb-110">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="dec-review-topbar nav mb-45">
+            <a class="active" data-bs-toggle="tab" href="#des-details1">Description</a>
+          </div>
+          <div class="tab-content dec-review-bottom">
+            <div id="des-details1" class="tab-pane active">
+              <div class="description-wrap">
+                <?php echo $product_details->long_description; ?>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('main_master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\availablesarees\resources\views/product_details.blade.php ENDPATH**/ ?>

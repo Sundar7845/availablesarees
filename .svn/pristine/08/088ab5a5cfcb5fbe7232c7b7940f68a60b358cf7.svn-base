@@ -1,0 +1,106 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Category;
+use App\Models\Colors;
+use App\Models\Product;
+use App\Models\ProductMultipleImage;
+use ElePHPant\SocialShare\SocialShare;
+use Illuminate\Http\Request;
+use App\Traits\Utils;
+
+class SareesController extends Controller
+{
+	use Utils;
+	private $sel_color = "";
+	private $sort_by = "";
+	private $pagecount = 8;
+	//Shop Page
+	public function SareesShop(Request $request)
+	{
+		$shop_all_products = Product::where('current_stock', '>', 0)->inRandomOrder()->paginate($this->pagecount);
+		$color = Colors::get();
+		$sel_color = $this->sel_color;
+		$category_name = $request->category_name;
+		$sort_by = $request->sort;
+		$category = Category::get();
+		$category_id = $request->category;
+		//  Load More Product with Ajax
+		if ($request->ajax()) {
+			$grid_view = view('shop_grid_view', compact('shop_all_products'))->render();
+			return response()->json(['grid_view' => $grid_view]);
+		}
+		//  End Load More Product with Ajax
+
+		return view('shop_details', compact('shop_all_products', 'color', 'category', 'sel_color', 'sort_by', 'category_name', 'category_id'));
+	}
+
+	public function SareesDetails($id, $slug)
+	{
+		$share = new SocialShare(url('/product/details/' . $id . '/' . $slug), 'www.availablesarees.com');
+		$product_details = Product::with('color', 'category')->findOrFail($id);
+		$multiImage = ProductMultipleImage::where('product_id', $id)->get();
+		$cat_id = $product_details->category_id;
+		$related_products = Product::where('category_id', $cat_id)->where('id', '!=', $id)->orderBy('id', 'DESC')->limit(15)->get();
+
+		return view('product_details', compact('product_details', 'multiImage', 'related_products', 'share'));
+	}
+
+
+	public function productSort(Request $request)
+	{
+		$category_id = $request->category;
+		$sort_by = $request->sort;
+		$sel_color = $this->sel_color;
+		$color = Colors::get();
+
+		$user_id = 0;
+
+		$query = $this->getProductsSortByProductType($user_id, $sort_by);
+		$shop_all_products = $query->get();
+		$category = Category::get();
+
+
+		return view('shop_details', compact('shop_all_products', 'color', 'sel_color', 'sort_by', 'category', 'category_id'));
+	}
+
+	public function productColor(Request $request)
+	{
+		$category_id = $request->category;
+		$sort_by = $request->sort;
+		$sel_color = $request->color_sort;
+		$user_id = 0;
+		$query = $this->getProductsColorByProductType($user_id, $sel_color);
+		$shop_all_products = $query->inRandomOrder()->get();
+		$color = Colors::get();
+		$category = Category::get();
+
+		return view('shop_details', compact('shop_all_products', 'color', 'sel_color', 'sort_by', 'category', 'category_id'));
+	}
+
+	public function CategoryDetails(Request $request)
+	{
+		$category_id = $request->category;
+		$sel_color = $this->sel_color;
+		$category_name = $request->category_name;
+		$sort_by = $this->sort_by;
+		$user_id = 0;
+		$query = $this->getAllProducts($user_id);
+
+		$shop_all_products = $query->where('category_id', $category_id)
+			->inRandomOrder()
+			->orderBy('id', 'DESC')
+			->paginate($this->pagecount);
+		$color = Colors::get();
+		$category = Category::get();
+		//  Load More Product with Ajax
+		if ($request->ajax()) {
+			$grid_view = view('shop_grid_view', compact('shop_all_products'))->render();
+			return response()->json(['grid_view' => $grid_view]);
+		}
+		//  End Load More Product with Ajax
+
+		return view('shop_details', compact('shop_all_products', 'color', 'category', 'sel_color', 'sort_by', 'category_id'));
+	}
+}
